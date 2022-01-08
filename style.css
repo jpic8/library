@@ -1,0 +1,84 @@
+/***style.css***/
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  font-family: Helvetica, sans-serif;
+  font-weight: normal;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  background: linear-gradient(to right, peachpuff, rgb(80, 172, 248));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 25px;
+}
+
+button {
+  cursor: pointer;
+  font-size: 1.4rem;
+  border-top: 4px solid rgb(80, 172, 248);
+  border-left: 3px solid rgb(80, 172, 248);
+  outline: none;
+  padding: 5px;
+  margin: 2px;
+}
+
+.deleteBtn {
+  cursor: pointer;
+  font-size: 1rem;
+  border-top: 4px solid rgb(80, 172, 248);
+  border-left: 3px solid rgb(80, 172, 248);
+  outline: none;
+  padding: 5px;
+  margin: 2px;
+}
+
+/***#region table***/
+/* table {
+  width: 60%;
+  background-color: peachpuff;
+}
+
+table,
+th {
+  border: 1px solid black;
+  text-align: left;
+}
+
+th {
+  height: 40px;
+  font-weight: 550;
+  background-color: rgb(55, 163, 252, 0.9);
+  color: rgb(10, 0, 0);
+  font-size: 18px;
+  padding: 5px;
+}
+
+th:hover {
+  background-color: rgb(55, 163, 252, 0.7);
+}
+
+td {
+  height: 22px;
+  padding: 5px;
+  border-bottom: 1px dotted black;
+} */
+/***#region***/
+
+/***Javascript Elements***/
+.libraryCard {
+  font-size: 1.2rem;
+  border-top: 4px solid rgb(80, 172, 248);
+  border-left: 3px solid rgb(80, 172, 248);
+  background-color: rgb(252, 246, 241);
+  padding: 10px;
+  margin: 3px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
