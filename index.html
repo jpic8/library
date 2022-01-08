@@ -10,15 +10,33 @@
   </head>
   <body>
     <button data-entry>NEW BOOK</button>
-    <div data-form></div>
-    <div data-deck></div>
-    <div class="libraryCard">
-      {"title":"new book","author":"some guy","pages":"33333"}<button
-        class="deleteBtn"
-      >
-        Delete
-      </button>
+    <div data-form>
+      <form id="form" action="/script.js">
+        <span data-entry-close class="close">&times;</span>
+        <ledgend>New Book</ledgend>
+        <div id="textInput">
+          <p>
+            <input type="text" id="title" name="title" placeholder="Title" />
+          </p>
+          <p>
+            <input type="text" id="author" name="author" placeholder="Author" />
+          </p>
+          <p>
+            <input type="text" id="pages" name="pages" placeholder="Pages" />
+          </p>
+        </div>
+        <div id="checkBox">
+          <p>
+            <label>Read: </label
+            ><input type="checkbox" id="read" name="read" value="yes" />
+          </p>
+        </div>
+        <button data-add-button type="submit" form="form" id="addBtn">
+          Add
+        </button>
+      </form>
     </div>
+    <div data-deck></div>
     <table data-table></table>
   </body>
 </html>

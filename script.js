@@ -1,15 +1,24 @@
 //script.js
 
 const myLibrary = [];
-const entryBtn = document.querySelector("[data-entry]");
+const newBookBtn = document.querySelector("[data-entry]");
 const form = document.querySelector("[data-form]");
-const table = document.querySelector("[data-table]");
+form.style.display = "none";
 const deck = document.querySelector("[data-deck]");
+const table = document.querySelector("[data-table]");
+
+const addBtn = document.querySelector("[data-add-button]");
+const closeBtn = document.querySelector("[data-entry-close]");
 
 //event listeners
-entryBtn.addEventListener("click", () => {
-  newEntry(deck);
+newBookBtn.addEventListener("click", () => {
+  newEntry(form, deck);
 });
+addBtn.addEventListener("click", () => {
+  addBookToLibrary;
+});
+// newBookBtn.addEventListener("click", () => (form.style.display = "block"));
+closeBtn.addEventListener("click", () => (form.style.display = "none"));
 
 //Book object constructor for all library entries
 function Book(title, author, pages) {
@@ -18,11 +27,21 @@ function Book(title, author, pages) {
   this.pages = pages;
 }
 
+// class Book {
+//   constructor(title, author, pages, read) {
+//     this.title = form.title.value;
+//     this.author = form.author.value;
+//     this.pages = form.pages.value;
+//     this.read = form.read.checked;
+//   }
+// }
+
 function addBookToLibrary(entry) {
   myLibrary.push(entry);
 }
 
-function newEntry(deck) {
+function newEntry(form, deck) {
+  form.style.display = "block";
   let newBook = Object.create(Book);
   newBook.title = prompt("What is the title?");
   newBook.author = prompt("Who is the author?");
@@ -30,6 +49,13 @@ function newEntry(deck) {
   addBookToLibrary(newBook);
   newCard(deck, newBook);
 }
+
+// function newEntry (form, deck) {
+//   form.style.display = 'block'
+
+// }
+
+function popUpForm() {}
 
 function newCard(deck, newBook) {
   let entry = `${newBook.title} by ${newBook.author} is ${newBook.pages} pages`;
