@@ -56,10 +56,10 @@ const libraryModule = (function () {
     render(myLibrary);
   }
 
-  function deleteEntry() {
-    display.removeChild(e.target);
-    render(myLibrary);
-  }
+  // function deleteEntry() {
+  //   display.removeChild(e.target);
+  //   render(myLibrary);
+  // }
 
   const theHobbit = new Book("The Hobbit", "J.R.R. Tolkien", 295);
   theHobbit.read = false;

@@ -39,38 +39,6 @@ button {
   margin-left: 10px;
 }
 
-/***#region table***/
-/* table {
-  width: 60%;
-  background-color: peachpuff;
-}
-
-table,
-th {
-  border: 1px solid black;
-  text-align: left;
-}
-
-th {
-  height: 40px;
-  font-weight: 550;
-  background-color: rgb(55, 163, 252, 0.9);
-  color: rgb(10, 0, 0);
-  font-size: 18px;
-  padding: 5px;
-}
-
-th:hover {
-  background-color: rgb(55, 163, 252, 0.7);
-}
-
-td {
-  height: 22px;
-  padding: 5px;
-  border-bottom: 1px dotted black;
-} */
-/***#region***/
-
 /***Javascript Elements***/
 .libraryCard {
   font-size: 1.2rem;
