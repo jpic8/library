@@ -1,228 +1,87 @@
-//script.js
+//script refactor
 
-const myLibrary = [];
-const newBookBtn = document.querySelector("[data-entry]");
-const form = document.querySelector("[data-form]");
-form.style.display = "none";
-const deck = document.querySelector("[data-deck]");
-const table = document.querySelector("[data-table]");
+const libraryModule = (function () {
+  let myLibrary = [];
 
-const addBtn = document.querySelector("[data-add-button]");
-const closeBtn = document.querySelector("[data-entry-close]");
-
-//event listeners
-newBookBtn.addEventListener("click", () => {
-  newEntry(form, deck);
-});
-addBtn.addEventListener("click", () => {
-  addBookToLibrary;
-});
-// newBookBtn.addEventListener("click", () => (form.style.display = "block"));
-closeBtn.addEventListener("click", () => (form.style.display = "none"));
-
-//Book object constructor for all library entries
-function Book(title, author, pages) {
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-}
-
-// class Book {
-//   constructor(title, author, pages, read) {
-//     this.title = form.title.value;
-//     this.author = form.author.value;
-//     this.pages = form.pages.value;
-//     this.read = form.read.checked;
-//   }
-// }
-
-function addBookToLibrary(entry) {
-  myLibrary.push(entry);
-}
-
-function newEntry(form, deck) {
-  form.style.display = "block";
-  let newBook = Object.create(Book);
-  newBook.title = prompt("What is the title?");
-  newBook.author = prompt("Who is the author?");
-  newBook.pages = prompt("How many pages?");
-  addBookToLibrary(newBook);
-  newCard(deck, newBook);
-}
-
-// function newEntry (form, deck) {
-//   form.style.display = 'block'
-
-// }
-
-function popUpForm() {}
-
-function newCard(deck, newBook) {
-  let entry = `${newBook.title} by ${newBook.author} is ${newBook.pages} pages`;
-  let card = document.createElement("div");
-  let deleteBtn = document.createElement("Button");
-  deleteBtn.className = "deleteBtn";
-  deleteBtn.textContent = "Delete";
-  card.innerText = entry;
-  card.className = "libraryCard";
-  card.appendChild(deleteBtn);
-  deck.appendChild(card);
-}
-
-function initialDeck(deck, myLibrary) {
-  for (let books of myLibrary) {
-    let entry = `${books.title} by ${books.author} is ${books.pages} pages`;
-    let card = document.createElement("div");
-    let deleteBtn = document.createElement("Button");
-    deleteBtn.className = "deleteBtn";
-    deleteBtn.textContent = "Delete";
-    card.innerText = entry;
-    card.className = "libraryCard";
-    card.appendChild(deleteBtn);
-    deck.appendChild(card);
+  //constructor function for book objects in library
+  function Book(title, author, pages) {
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
   }
-}
-// function initialTable(table, myLibrary) {
-//   let thead = table.createTHead();
-//   let headRow = thead.insertRow();
-//   let details = Object.keys(myLibrary[0]);
-//   for (key in details) {
-//     let th = document.createElement("th");
-//     let text = document.createTextNode(details[key]);
-//     th.appendChild(text);
-//     headRow.appendChild(th);
-//   }
-//   for (let books of myLibrary) {
-//     let row = table.insertRow();
-//     for (key in books) {
-//       let cell = row.insertCell();
-//       let text = document.createTextNode(books[key]);
-//       cell.appendChild(text);
-//     }
-//   }
-// }
 
-// function newEntry(table) {
-//   let newBook = Object.create(Book);
-//   newBook.title = prompt("What is the title?");
-//   newBook.author = prompt("Who is the author?");
-//   newBook.pages = prompt("How many pages?");
-//   addBookToLibrary(newBook);
-//   let row = table.insertRow();
-//   for (key in newBook) {
-//     let cell = row.insertCell();
-//     let text = document.createTextNode(newBook[key]);
-//     cell.appendChild(text);
-//   }
-// }
+  //DOM elements
+  const newBookBtn = document.querySelector("[data-entry]");
+  const display = document.querySelector("[data-display]");
+  // const deleteBtn = document.getElementsByClassName(".deleteBtn");
 
-//#region library table
-//generates table head with book entry details
-// function generateTableHead(table, myLibrary) {
-//   let thead = table.createTHead();
-//   let row = thead.insertRow();
-//   let details = Object.keys(myLibrary[0]);
-//   for (key in details) {
-//     let th = document.createElement("th");
-//     let text = document.createTextNode(details[key]);
-//     th.appendChild(text);
-//     row.appendChild(th);
-//   }
-// }
-// //generates table with Books from myLibrary
-// function generateTable(table, myLibrary) {
-//   for (let books of myLibrary) {
-//     let row = table.insertRow();
-//     for (key in books) {
-//       let cell = row.insertCell();
-//       let text = document.createTextNode(books[key]);
-//       cell.appendChild(text);
-//     }
-//   }
-// }
+  //event listeners
+  newBookBtn.addEventListener("click", () => {
+    userInput(display);
+  });
+  // deleteBtn.addEventListener("click", () => {
+  //   deleteEntry();
+  // });
 
-// generateTableHead(table, myLibrary);
-// generateTable(table, myLibrary);
-//#endregion
+  function clearDOM() {
+    let list = display;
+    let first = list.firstElementChild;
+    while (first) {
+      first.remove();
+      first = list.firstElementChild;
+    }
+  }
 
-//#region prepopulated library
-//prepopulate library with these temporary entries
-const theHobbit = new Book("The Hobbit", "J.R.R. Tolkien", 295);
-theHobbit.read = false;
-const zorro = new Book("Zorro", "Isabel Allende", 677);
-zorro.read = true;
-const donQuixote = new Book("Don Quixote", "Miguel de Cervantes", 1008);
-donQuixote.read = false;
-const drSuess = new Book("Red Fish, Blue Fish", "Dr. Suess", 32);
-drSuess.read = true;
-addBookToLibrary(drSuess);
-addBookToLibrary(theHobbit);
-addBookToLibrary(zorro);
-addBookToLibrary(donQuixote);
-//#endregion
+  function render(myLibrary) {
+    clearDOM();
+    for (i = 0; i < myLibrary.length; i++) {
+      let entry = `${myLibrary[i].title} by ${myLibrary[i].author} is ${myLibrary[i].pages} pages`;
+      let li = document.createElement("li");
+      li.innerText = entry;
+      li.className = "libraryCard";
+      let deleteBtn = document.createElement("button");
+      deleteBtn.textContent = "X";
+      deleteBtn.className = "deleteBtn";
+      li.appendChild(deleteBtn);
+      display.appendChild(li);
+    }
+  }
 
-// updateDisplay(libTextElement, myLibrary);
+  function userInput() {
+    let book = Object.create(Book);
+    book.title = prompt("What is the title?");
+    book.author = prompt("Who is the author?");
+    book.pages = prompt("How many pages?");
+    myLibrary.push(book);
+    render(myLibrary);
+  }
 
-//#region dev code
-// function toggleLibrary(table) {
-//   if ((table.style.display = "initial")) {
-//     table.style.display = "none";
-//     toggle.textContent = "show library";
-//   } else {
-//     table.style.display = "initial";
-//     toggle.text = "hide library";
-//   }
-// }
+  function deleteEntry() {
+    display.removeChild(e.target);
+    render(myLibrary);
+  }
 
-// toggle.addEventListener("click", () => {
-//   toggleLibrary(table);
-// });
+  const theHobbit = new Book("The Hobbit", "J.R.R. Tolkien", 295);
+  theHobbit.read = false;
+  const zorro = new Book("Zorro", "Isabel Allende", 677);
+  zorro.read = true;
+  const donQuixote = new Book("Don Quixote", "Miguel de Cervantes", 1008);
+  donQuixote.read = false;
+  const drSuess = new Book("Red Fish, Blue Fish", "Dr. Suess", 32);
+  drSuess.read = true;
+  myLibrary.push(drSuess);
+  myLibrary.push(theHobbit);
+  myLibrary.push(zorro);
+  myLibrary.push(donQuixote);
 
-// function newEntry() {
-//   newBook = Object.create(Book);
-//   newBook.title = prompt("What is the title?");
-//   newBook.author = prompt("Who is the author?");
-//   newBook.pages = prompt("How many pages long?");
-//   addBookToLibrary(newBook);
-//   console.table(myLibrary);
-//   let removeTab = document.querySelector("[data-table]");
-//   let parentEl = removeTab.parentElement;
-//   parentEl.removeChild(removeTab);
-//   let newTab = document.querySelector("[data-table]");
-//   generateTableHead(newTab, myLibrary);
-//   generateTable(newTab, myLibrary);
-// }
+  return {
+    myLibrary,
+    display,
+    render,
+    clearDOM,
+  };
+})();
 
-// function updateTable() {
-//   if (table.innerContent === "") {
-//     generateTable(myLibrary);
-//   } else {
-//     table.innerContent = "";
-//     generateTable(myLibrary);
-//   }
-// }
-
-// function newEntry() {
-//   let newBook = Object.create(Book);
-//   newBook.title = prompt("What is the title?");
-//   newBook.author = prompt("who is the author?");
-//   newBook.pages = prompt("Number of pages?");
-//   addBookToLibrary(newBook);
-//   let bookString = `${newBook.title} by ${newBook.author} is ${newBook.pages} pages long`;
-//   let text = document.createTextNode(bookString);
-//   libTextElement.appendChild(text);
-// }
-
-// function updateDisplay(libTextElement, myLibrary) {
-//   for (let books of myLibrary) {
-//     let bookString = JSON.stringify(books);
-//     let text = document.createTextNode(bookString);
-//     libTextElement.appendChild(`text \n`);
-//   }
-// }
-//#endregion
-
-// form.innerHTML =
-//   "<input type 'text' id='title' value='title'><br><input type 'text' id='author' value= 'author'><br><input type 'text' id='pages' value='pages'><input type = 'submit' value='Submit'>";
-
-initialDeck(deck, myLibrary);
+let base = libraryModule;
+//renders predetermined library queue
+base.render(base.myLibrary);
