@@ -11,3 +11,5 @@ Create [X]
 Read [X]
 Update [X]
 Delete []
+
+2/21/22 -- finally circled back and finished the functionality for this one. Pulling data from the HTML forms not as complicated as I originally throught. Fun project which should serve as a good base for the next one which is the to-do list.
