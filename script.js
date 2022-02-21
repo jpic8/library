@@ -1,87 +1,110 @@
-//script refactor
+const libraryModule = (() => {
+  //DOM elements
+  const addBtn = document.querySelector("#addBtn");
+  const newBtn = document.querySelector("#newBtn");
+  const popUpForm = document.querySelector("#popUp");
+  const closePopUp = document.getElementsByTagName("span")[0];
 
-const libraryModule = (function () {
-  let myLibrary = [];
+  //global event listeners
+  addBtn.addEventListener("click", addBookToLibrary);
+  newBtn.addEventListener("click", () => (popUpForm.style.display = "block"));
+  closePopUp.addEventListener(
+    "click",
+    () => (popUpForm.style.display = "none")
+  );
 
   //constructor function for book objects in library
-  function Book(title, author, pages) {
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-  }
-
-  //DOM elements
-  const newBookBtn = document.querySelector("[data-entry]");
-  const display = document.querySelector("[data-display]");
-  // const deleteBtn = document.getElementsByClassName(".deleteBtn");
-
-  //event listeners
-  newBookBtn.addEventListener("click", () => {
-    userInput(display);
-  });
-  // deleteBtn.addEventListener("click", () => {
-  //   deleteEntry();
-  // });
-
-  function clearDOM() {
-    let list = display;
-    let first = list.firstElementChild;
-    while (first) {
-      first.remove();
-      first = list.firstElementChild;
+  class Book {
+    constructor(title, author, pages, read) {
+      this.title = form.title.value;
+      this.author = form.author.value;
+      this.pages = form.pages.value + "pg";
+      this.read = form.read.checked;
     }
   }
 
-  function render(myLibrary) {
-    clearDOM();
-    for (i = 0; i < myLibrary.length; i++) {
-      let entry = `${myLibrary[i].title} by ${myLibrary[i].author} is ${myLibrary[i].pages} pages`;
-      let li = document.createElement("li");
-      li.innerText = entry;
-      li.className = "libraryCard";
-      let deleteBtn = document.createElement("button");
-      deleteBtn.textContent = "X";
-      deleteBtn.className = "deleteBtn";
-      li.appendChild(deleteBtn);
-      display.appendChild(li);
+  let myLibrary = []; //empty array
+  let newBook;
+
+  function addBookToLibrary() {
+    window.event.preventDefault();
+    popUpForm.style.display = "none";
+    newBook = new Book(title, author, pages, read);
+    myLibrary.push(newBook);
+    setData();
+    render();
+    form.reset();
+  }
+
+  //called by render() to propogate DOM with myLibrary array objects
+  function createBook(item) {
+    const library = document.querySelector("#library-container");
+    const bookDiv = document.createElement("div");
+    bookDiv.classList.add("book");
+    bookDiv.setAttribute("id", myLibrary.indexOf(item));
+    const titleDiv = document.createElement("div");
+    titleDiv.textContent = item.title;
+    titleDiv.classList.add("title");
+    bookDiv.appendChild(titleDiv);
+    const authDiv = document.createElement("div");
+    authDiv.textContent = item.author;
+    authDiv.classList.add("author");
+    bookDiv.appendChild(authDiv);
+    const pageDiv = document.createElement("div");
+    pageDiv.textContent = item.pages;
+    pageDiv.classList.add("pages");
+    bookDiv.appendChild(pageDiv);
+    const readBtn = document.createElement("button");
+    readBtn.classList.add("readBtn");
+    bookDiv.appendChild(readBtn);
+    if (item.read === false) {
+      readBtn.textContent = "Not Read";
+      readBtn.style.backgroundColor = "#e04f63";
+    } else {
+      readBtn.textContent = "Read";
+      readBtn.style.backgroundColor = "#63da63";
+    }
+    const removeBtn = document.createElement("button");
+    removeBtn.textContent = "Remove";
+    removeBtn.setAttribute("id", "removeBtn");
+    bookDiv.appendChild(removeBtn);
+    library.appendChild(bookDiv);
+    removeBtn.addEventListener("click", () => {
+      myLibrary.splice(myLibrary.indexOf(item), 1);
+      setData();
+      render();
+    });
+    readBtn.addEventListener("click", () => {
+      item.read = !item.read;
+      setData();
+      render();
+    });
+  }
+
+  // setting Library to be stored in local storage
+  function setData() {
+    localStorage.setItem(`myLibrary`, JSON.stringify(myLibrary));
+  }
+
+  //clears DOM and calls createBook function to render from myLibrary array
+  function render() {
+    const display = document.getElementById("library-container");
+    const books = document.querySelectorAll(".book");
+    books.forEach((book) => display.removeChild(book));
+
+    for (let i = 0; i < myLibrary.length; i++) {
+      createBook(myLibrary[i]);
     }
   }
 
-  function userInput() {
-    let book = Object.create(Book);
-    book.title = prompt("What is the title?");
-    book.author = prompt("Who is the author?");
-    book.pages = prompt("How many pages?");
-    myLibrary.push(book);
-    render(myLibrary);
+  function restore() {
+    if (!localStorage.myLibrary) {
+      render();
+    } else {
+      let objects = localStorage.getItem("myLibrary");
+      objects = JSON.parse(objects);
+      myLibrary = objects;
+      render();
+    }
   }
-
-  // function deleteEntry() {
-  //   display.removeChild(e.target);
-  //   render(myLibrary);
-  // }
-
-  const theHobbit = new Book("The Hobbit", "J.R.R. Tolkien", 295);
-  theHobbit.read = false;
-  const zorro = new Book("Zorro", "Isabel Allende", 677);
-  zorro.read = true;
-  const donQuixote = new Book("Don Quixote", "Miguel de Cervantes", 1008);
-  donQuixote.read = false;
-  const drSuess = new Book("Red Fish, Blue Fish", "Dr. Suess", 32);
-  drSuess.read = true;
-  myLibrary.push(drSuess);
-  myLibrary.push(theHobbit);
-  myLibrary.push(zorro);
-  myLibrary.push(donQuixote);
-
-  return {
-    myLibrary,
-    display,
-    render,
-    clearDOM,
-  };
 })();
-
-let base = libraryModule;
-//renders predetermined library queue
-base.render(base.myLibrary);
