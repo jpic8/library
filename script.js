@@ -6,19 +6,20 @@ const libraryModule = (() => {
   const closePopUp = document.getElementsByTagName("span")[0];
 
   //global event listeners
-  addBtn.addEventListener("click", addBookToLibrary);
+  addBtn.addEventListener("click", validateForm);
   newBtn.addEventListener("click", () => (popUpForm.style.display = "block"));
   closePopUp.addEventListener(
     "click",
     () => (popUpForm.style.display = "none")
   );
+  window.addEventListener("load", () => restore(myLibrary));
 
   //constructor function for book objects in library
   class Book {
     constructor(title, author, pages, read) {
       this.title = form.title.value;
       this.author = form.author.value;
-      this.pages = form.pages.value + "pg";
+      this.pages = form.pages.value;
       this.read = form.read.checked;
     }
   }
@@ -29,11 +30,30 @@ const libraryModule = (() => {
   function addBookToLibrary() {
     window.event.preventDefault();
     popUpForm.style.display = "none";
-    newBook = new Book(title, author, pages, read);
+    // newBook = new Book(title, author, pages, read);
     myLibrary.push(newBook);
     setData();
     render();
     form.reset();
+    console.table(myLibrary);
+  }
+
+  function validateForm() {
+    window.event.preventDefault();
+    newBook = new Book(title, author, pages, read);
+    if (newBook.title == "") {
+      alert("Please enter a valid title");
+    } else if (newBook.author == "") {
+      alert("Please enter a valid author");
+    } else if (
+      newBook.pages > 24000 ||
+      newBook.pages === NaN ||
+      newBook.pages == ""
+    ) {
+      alert("Please enter a valid page count");
+    } else {
+      addBookToLibrary();
+    }
   }
 
   //called by render() to propogate DOM with myLibrary array objects
