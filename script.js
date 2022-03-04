@@ -30,7 +30,6 @@ const libraryModule = (() => {
   function addBookToLibrary() {
     window.event.preventDefault();
     popUpForm.style.display = "none";
-    // newBook = new Book(title, author, pages, read);
     myLibrary.push(newBook);
     setData();
     render();
