@@ -34,7 +34,6 @@ const libraryModule = (() => {
     setData();
     render();
     form.reset();
-    console.table(myLibrary);
   }
 
   function validateForm() {
